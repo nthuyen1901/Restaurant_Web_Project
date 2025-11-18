@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block class %}class="sub_page"{% endblock class %}
+{% block table_status %}active{% endblock table_status %}
+
+{% block main %}
+
+<section class="book_section layout_padding">
+  <div class="container">
+    <div class="heading_container">
+      <h2>Réserver une table</h2>
+    </div>
+
+    <div class="row">
+     
+      <div class="col-md-6">
+        <div class="form_container">
+         
+          {% if messages %}
+          <div class="alert alert-info">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <form action="{% url 'Book_Table' %}" method="POST">
+            {% csrf_token %}
+            <div>
+              <input type="text" class="form-control" name="user_name" required placeholder="Votre nom" />
+            </div>
+            <div>
+              <input type="text" class="form-control" name="phone_number" required placeholder="Numéro de téléphone" />
+            </div>
+            <div>
+              <input type="email" class="form-control" name="user_email" placeholder="Votre email" />
+            </div>
+            <div>
+              <select class="form-control nice-select wide" required name="total_person">
+                <option value="" disabled selected>Combien de personnes ?</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div>
+              <input type="date" required name="booking_data" class="form-control" />
+            </div>
+            <div class="btn_box">
+              <button type="submit">Réserver maintenant</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+     
+      <div class="col-md-6">
+        <div class="map_container">
+          <div id="map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Localisation du restaurant : 200 Av. de la République, 92000 Nanterre
+    var map = L.map('map').setView([48.8913, 2.2067], 16);
+
+    // Charger les tuiles OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributeurs'
+    }).addTo(map);
+
+    // Ajouter un marqueur sur le restaurant
+    var marker = L.marker([48.8913, 2.2067]).addTo(map);
+    marker.bindPopup("<b>Saigon Délices</b><br>200 Av. de la République<br>92000 Nanterre, France").openPopup();
+  });
+</script>
+
+{% endblock main %}

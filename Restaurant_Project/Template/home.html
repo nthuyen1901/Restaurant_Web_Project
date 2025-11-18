@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block home_status %}active{% endblock home_status %}
+{% load static %}
+
+{% block slider %}
+
+<section class="slider_section">
+  <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7 col-lg-6">
+              <div class="detail-box">
+                <h1>
+                  Restaurant Vietnamien
+                </h1>
+                <p>
+                  Chez <strong>BG98 Délices</strong>, nous célébrons l’art culinaire vietnamien à travers une cuisine raffinée et pleine de caractère.
+                  Nos chefs marient tradition et modernité pour offrir des plats équilibrés, sains et savoureux — inspirés des marchés animés de Hanoi et des ruelles parfumées de Saigon.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <ol class="carousel-indicators">
+        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+{% endblock slider %}
+
+{% block main %}
+
+<section class="offer_section layout_padding-bottom">
+  <div class="offer_container">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'images/o1.jpg' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>Jeudis Gourmands</h5>
+              <h6><span>20%</span> de réduction</h6>
+              <a href="#">
+                Commander maintenant
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'images/o2.jpg' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>Journées Spéciales</h5>
+              <h6><span>15%</span> de réduction</h6>
+              <a href="#">
+                Commander maintenant
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="food_section layout_padding-bottom">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>Notre Menu</h2>
+    </div>
+
+   
+    <ul class="filters_menu">
+      <li class="active" data-filter="*">Tous</li>
+      <li data-filter=".entree">Entrées</li>
+      <li data-filter=".plat">Plats</li>
+      <li data-filter=".dessert">Desserts</li>
+      <li data-filter=".boisson">Boissons</li>
+    </ul>
+
+    
+    <div class="filters-content">
+      <div class="row grid">
+        {% for j in items %}
+        <div class="col-sm-6 col-lg-4 all {{ j.Category|slugify }}">
+          <div class="box">
+            <div class="img-box">
+              <img src="/media/{{ j.Image }}" alt="{{ j.Item_name }}">
+            </div>
+            <div class="detail-box">
+              <h5>{{ j.Item_name }}</h5>
+              <p>{{ j.description }}</p>
+              <div class="options">
+                <h6>{{ j.Price }} €</h6>
+                <button class="btn btn-success add-to-cart"
+                  data-item-id="{{ j.id }}"
+                  data-item-name="{{ j.Item_name }}"
+                  data-item-price="{{ j.Price }}">
+                  Ajouter au panier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="btn-box">
+      <a href="#">Voir plus</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="book_section layout_padding">
+  <div class="container">
+    <div class="heading_container">
+      <h2>Réserver une table</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form_container">
+          <form action="{% url 'Book_Table' %}" method="POST">
+            {% csrf_token %}
+            <div>
+              <input type="text" class="form-control" name="user_name" required placeholder="Votre nom" />
+            </div>
+            <div>
+              <input type="text" class="form-control" name="phone_number" required placeholder="Numéro de téléphone" />
+            </div>
+            <div>
+              <input type="email" class="form-control" name="user_email" placeholder="Votre email" />
+            </div>
+            <div>
+              <select class="form-control nice-select wide" required name="total_person">
+                <option value="" disabled selected>Combien de personnes ?</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div>
+              <input type="date" required name="booking_data" class="form-control">
+            </div>
+            <div class="btn_box">
+              <button>Réserver maintenant</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="map_container">
+          <div id="googleMap"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="client_section layout_padding-bottom">
+  <div class="container">
+    <div class="heading_container heading_center psudo_white_primary mb_45">
+      <h2>Ce que disent nos clients</h2>
+    </div>
+
+    <div class="carousel-wrap row">
+      <div class="owl-carousel client_owl-carousel">
+        {% for k in review %}
+        <div class="item">
+          <div class="box">
+            <div class="detail-box">
+              <p>{{ k.Description }}</p>
+              <h6>{{ k.User_name }}</h6>
+              <p>Note : {{ k.Rating }}/5</p>
+            </div>
+            <div class="img-box">
+              <img src="/media/{{ k.Image }}" alt="{{ k.User_name }}" class="box-img">
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<script>
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', function() {
+      const itemId = this.getAttribute('data-item-id');
+      fetch('/add-to-cart/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFTOKEN': '{{ csrf_token }}'
+        },
+        body: `item_id=${itemId}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+        } else {
+          alert("Échec de l'ajout de l'article au panier.");
+        }
+      })
+      .catch(error => console.error('Erreur :', error));
+    });
+  });
+</script>
+
+{% endblock main %}
